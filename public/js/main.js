@@ -1,4 +1,4 @@
-document.getElementById("root").innerHTML = `
+document.getElementById("wrapper").innerHTML = `
 	<header>
 		<h3>Day la thanh tieu de</h3>
 	</header>
