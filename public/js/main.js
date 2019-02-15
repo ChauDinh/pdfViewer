@@ -1,5 +1,5 @@
-document.getElementById("wrapper").innerHTML = `
-	<header class="top-bar">
+document.querySelector("body").innerHTML = `
+	<div class="top-bar">
 		<button class="btn" id="prev-page">
 			<i class="fas fa-arrow-circle-left"></i> Prev Page
 		</button>
@@ -9,16 +9,16 @@ document.getElementById("wrapper").innerHTML = `
 		<span class="page-info">
 			Page <span id="page-num"></span> of <span id="page-count"></span>
 		</span>
-	</header>
-	<main>
-		<canvas id="pdf-render"></canvas>	
-	</main>
-	<footer>
-		<h3>Day la footer</h3>
+	</div>
+	
+	<canvas id="pdf-render"></canvas>	
+	
+	<footer class="bottom-bar">
+		<p>Created by ChauDinh &copy; 2019</p>
 	</footer>
 `;
 
-const url = "../../src/demo.pdf";
+const url = "../../src/eloquentJS.pdf";
 
 let pdfDoc = null,
 	pageNum = 1,
@@ -87,13 +87,24 @@ const showNextPage = () => {
 };
 
 // Get Document
-pdfjsLib.getDocument(url).promise.then(pdfDoc_ => {
+pdfjsLib
+	.getDocument(url)
+	.promise.then(pdfDoc_ => {
 	pdfDoc = pdfDoc_;
 
 	document.querySelector("#page-count").textContent = pdfDoc.numPages;
 
 	renderPage(pageNum);
-});
+	})
+	.catch(err => {
+		// Display error
+		const div = document.createElement("div");
+		div.className = "error";
+		div.appendChild(document.createTextNode(err.message));
+		document.querySelector("body").insertBefore(div, canvas);
+		// Remove top bar
+		document.querySelector(".top-bar").style.display = "none";
+	});
 
 // Button Events
 document.querySelector("#prev-page").addEventListener("click", showPrevPage);
